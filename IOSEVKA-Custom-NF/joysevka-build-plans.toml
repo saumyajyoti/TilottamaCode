@@ -1,19 +1,20 @@
-[buildPlans.Miosevka]
-family = "Miosevka"
+[buildPlans.JoySevka]
+family = "JoySevka"
 spacing = "normal"
 serifs = "sans"
 noCvSs = true
 exportGlyphNames = false
 
-  [buildPlans.Miosevka.variants]
+  [buildPlans.JoySevka.variants]
   inherits = "ss20"
 
-    [buildPlans.Miosevka.variants.design]
+    [buildPlans.JoySevka.variants.design]
     capital-i = "short-serifed"
-    e = "rounded"
-    f = "flat-hook-tailed"
+    e = "flat-crossbar"
+    f = "flat-hook-serifless-crossbar-at-x-height"
     i = "serifed-flat-tailed"
     j = "serifed"
+    k = "curly-serifless"
     l = "serifed-semi-tailed"
     m = "short-leg-serifless"
     r = "serifless"
@@ -31,7 +32,7 @@ exportGlyphNames = false
     lig-hyphen-chain = "with-notch"
     lig-plus-chain = "without-notch"
 
-    [buildPlans.Miosevka.variants.italic]
+    [buildPlans.JoySevka.variants.italic]
     one = "no-base-long-top-serif"
     two = "straight-neck-serifless"
     four = "open-serifless"
@@ -58,8 +59,10 @@ exportGlyphNames = false
     b = "bottom-cut-serifless"
     c = "serifless"
     d = "tailed-serifless"
-    f = "flat-hook-tailed"
-    g = "single-storey-serifless"
+    e = "rounded"
+    f = "tailed"
+    g = "double-storey-open"
+    h = "tailed-serifless"
     i = "tailed-serifed"
     j = "serifless"
     k = "cursive-bottom-right-serifed"
@@ -97,28 +100,28 @@ exportGlyphNames = false
     lig-double-arrow-bar = "without-notch"
     lig-single-arrow-bar = "without-notch"
 
-[buildPlans.Miosevka.weights.Regular]
+[buildPlans.JoySevka.weights.Regular]
 shape = 400
 menu = 400
 css = 400
 
-[buildPlans.Miosevka.weights.Bold]
+[buildPlans.JoySevka.weights.Bold]
 shape = 700
 menu = 700
 css = 700
 
-[buildPlans.Miosevka.widths.Normal]
+[buildPlans.JoySevka.widths.Normal]
 shape = 600
 menu = 5
 css = "normal"
 
-[buildPlans.Miosevka.slopes.Upright]
+[buildPlans.JoySevka.slopes.Upright]
 angle = 0
 shape = "upright"
 menu = "upright"
 css = "normal"
 
-[buildPlans.Miosevka.slopes.Italic]
+[buildPlans.JoySevka.slopes.Italic]
 angle = 12
 shape = "italic"
 menu = "italic"

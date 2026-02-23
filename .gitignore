@@ -12,5 +12,10 @@ dist
 # Platform specified files
 .DS_store
 
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
 bin/nerdfont/bin/scripts/name_parser/__pycache__/*
 bin/nerdfont/bin/scripts/name_parser/log

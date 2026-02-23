@@ -18,9 +18,9 @@ SET FONTVERNUM=16
 SET IOSEVKA_PATH="%temp%\Iosevka"
 SET "PATH=%~dp0\..\bin;%PATH%"
 SET "FFPYTHON_EXE=%USERPROFILE%\scoop\apps\fontforge\current\bin\ffpython.exe"
-SET OUTPATH="D:\Font\Miosevka%FONTVERNUM%"
+SET OUTPATH="%~dp0dist\TilottamaCode%FONTVERNUM%"
 SET NERDFONT_PATCHER_PATH="%~dp0\..\bin\nerdfont\font-patcher"
-SET FONTVER=Miosevka%FONTVERNUM%
+SET FONTVER=TilottamaCode%FONTVERNUM%
 
 rmdir /S /Q %OUTPATH% >nul 2>&1
 mkdir %OUTPATH%
@@ -40,24 +40,23 @@ if exist %IOSEVKA_PATH%\ (
 
 call npm install
 echo =======================================================
-echo Build Miosevka
-copy /Y %~dp0\miosevka-build-plans.toml  %IOSEVKA_PATH%\private-build-plans.toml
-call npm run build -- ttf::Miosevka
+echo Build JoySevka
+copy /Y %~dp0\joysevka-build-plans.toml  %IOSEVKA_PATH%\private-build-plans.toml
+call npm run build -- ttf::JoySevka
 echo =======================================================
 echo Build Riosevka
 copy /Y %~dp0\riosevka-build-plans.toml  %IOSEVKA_PATH%\private-build-plans.toml
 call npm run build -- ttf::Riosevka
 
 echo =======================================================
-echo Merge Victor Mono glyphs into Miosevka Italic variants
-set mi_ttf_dir="%IOSEVKA_PATH%\dist\miosevka\ttf"
+echo Merge Victor Mono glyphs into JoySevka Italic only (BoldItalic left untouched)
+set mi_ttf_dir="%IOSEVKA_PATH%\dist\joysevka\ttf"
 cd /d %mi_ttf_dir%
-python "%~dp0resources\merge_vm_glyphs.py" Miosevka-Italic.ttf "%~dp0resources\VictorMono-MediumItalic.ttf" Miosevka-Italic.ttf
-python "%~dp0resources\merge_vm_glyphs.py" Miosevka-BoldItalic.ttf "%~dp0resources\VictorMono-BoldItalic.ttf" Miosevka-BoldItalic.ttf
+python "%~dp0resources\merge_vm_glyphs.py" JoySevka-Italic.ttf "%~dp0resources\VictorMono-MediumItalic.ttf" JoySevka-Italic.ttf
 cd /d %IOSEVKA_PATH%
 
 echo =======================================================
-call :PATCH miosevka
+call :PATCH joysevka
 call :PATCH riosevka
 
 echo Waiting for patching jobs to complete...
@@ -73,7 +72,7 @@ echo =======================================================
 echo Copy Files
 copy /Y %~dp0\..\*license.* %OUTPATH%
 copy /Y %~dp0\..\Install-Font.ps1 %OUTPATH%
-copy /Y "%IOSEVKA_PATH%\dist\miosevka\ttf\*.ttf" %OUTPATH%
+copy /Y "%IOSEVKA_PATH%\dist\joysevka\ttf\*.ttf" %OUTPATH%
 copy /Y "%IOSEVKA_PATH%\dist\riosevka\ttf\*.ttf" %OUTPATH%
 
 cd /d %OUTPATH%\..\

@@ -1,10 +1,10 @@
 """
 merge_vm_glyphs.py
 ------------------
-Copy specific glyphs from Victor Mono Italic variants into Miosevka Italic TTFs.
+Copy specific glyphs from Victor Mono Italic variants into JoySevka Italic TTFs.
 
 Usage (single pair):
-    python merge_vm_glyphs.py <miosevka.ttf> <victormono.ttf> [output.ttf]
+    python merge_vm_glyphs.py <joysevka.ttf> <victormono.ttf> [output.ttf]
 
 Usage (both pairs, files must be in the same directory):
     python merge_vm_glyphs.py
@@ -12,9 +12,9 @@ Usage (both pairs, files must be in the same directory):
 Glyphs merged: s  l  r  e  f  (edit GLYPHS list to change)
 
 Transform applied to each VM glyph before insertion:
-  - Scale X and Y by (miosevka_upm / vm_upm)  = 1000/1100 = 0.9091
+  - Scale X and Y by (joysevka_upm / vm_upm)  = 1000/1100 = 0.9091
   - Shift X right by half the leftover advance to centre in 600u cell
-  - Advance width forced to Miosevka standard   (600u)
+  - Advance width forced to JoySevka standard   (600u)
 """
 
 import sys
@@ -29,14 +29,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 PAIRS = [
     (
-        os.path.join(HERE, 'MiosevkaNerdFont-Italic.ttf'),
+        os.path.join(HERE, 'JoySevkaNerdFont-Italic.ttf'),
         os.path.join(HERE, 'VictorMono-MediumItalic.ttf'),
-        os.path.join(HERE, 'MiosevkaNerdFont-Italic-VMmerged.ttf'),
+        os.path.join(HERE, 'JoySevkaNerdFont-Italic-VMmerged.ttf'),
     ),
     (
-        os.path.join(HERE, 'MiosevkaNerdFont-BoldItalic.ttf'),
+        os.path.join(HERE, 'JoySevkaNerdFont-BoldItalic.ttf'),
         os.path.join(HERE, 'VictorMono-BoldItalic.ttf'),
-        os.path.join(HERE, 'MiosevkaNerdFont-BoldItalic-VMmerged.ttf'),
+        os.path.join(HERE, 'JoySevkaNerdFont-BoldItalic-VMmerged.ttf'),
     ),
 ]
 
@@ -49,7 +49,7 @@ def merge_pair(mi_path, vm_path, out_path):
 
     mi_upm = mi['head'].unitsPerEm
     vm_upm = vm['head'].unitsPerEm
-    mi_adv = 600                             # Miosevka monospace cell width
+    mi_adv = 600                             # JoySevka monospace cell width
 
     scale = mi_upm / vm_upm
 
@@ -67,7 +67,7 @@ def merge_pair(mi_path, vm_path, out_path):
             skipped.append(char)
             continue
         if cp not in mi_cmap:
-            print(f"  SKIP '{char}': not in Miosevka cmap")
+            print(f"  SKIP '{char}': not in JoySevka cmap")
             skipped.append(char)
             continue
 
@@ -87,7 +87,7 @@ def merge_pair(mi_path, vm_path, out_path):
 
         new_glyph = pen.glyph()
 
-        # Replace glyph outline in Miosevka
+        # Replace glyph outline in JoySevka
         mi['glyf'][mi_gname] = new_glyph
 
         # Update advance width; recalculate LSB from new bounding box
