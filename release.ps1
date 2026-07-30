@@ -4,10 +4,12 @@
   versioned zip and create a git tag.
 
 .DESCRIPTION
-  Packages the ALREADY-BUILT fonts found in:
-    - IOSEVKA-Custom-NF\dist\   (*.ttf  - JoySevka, Riosevka)
-    - MONASPACE-Custom-NF\dist\ (*.otf  - JoySpace)
-  together with every license file in the repo root (upstream + this project's own
+  Packages the ALREADY-BUILT, Nerd Font-patched fonts found in:
+    - IOSEVKA-Custom-NF\dist\TilottamaCode<N>\ (*NerdFont*.ttf - JoySevka, Riosevka)
+    - MONASPACE-Custom-NF\dist\               (*NerdFont*.otf - JoySpace)
+  Unpatched source faces in those folders are skipped, and each pipeline must have
+  produced output or the script fails (so a partial build can't ship a half-family zip).
+  These are bundled together with every license file in the repo root (upstream + this project's own
   OFL/MIT) and Install-Font.ps1, into dist\release\TilottamaCode-v<N>.zip, then creates
   an annotated git tag v<N>.
 
@@ -70,12 +72,34 @@ if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 New-Item -ItemType Directory -Path $stage -Force | Out-Null
 
 # --- collect built fonts -------------------------------------------------------------
-$fonts = @()
-$fonts += Get-ChildItem -Path (Join-Path $root 'IOSEVKA-Custom-NF\dist')  -Recurse -Filter *.ttf -ErrorAction SilentlyContinue
-$fonts += Get-ChildItem -Path (Join-Path $root 'MONASPACE-Custom-NF\dist') -Recurse -Filter *.otf -ErrorAction SilentlyContinue
-if (-not $fonts) {
-    throw "No fonts found in dist folders. Run nerdfont.bat and joyspace.bat first."
+# Both pipelines are validated SEPARATELY: an empty IOSEVKA-Custom-NF\dist used to slip
+# through and produce a JoySpace-only release, because the old check only tripped when
+# *every* dist folder was empty.
+$iosevkaDist   = Join-Path $root 'IOSEVKA-Custom-NF\dist'
+$monaspaceDist = Join-Path $root 'MONASPACE-Custom-NF\dist'
+
+# nerdfont.bat stages into IOSEVKA-Custom-NF\dist\TilottamaCode<N> and copies the whole
+# Iosevka ttf folder there, i.e. the UNPATCHED JoySevka-*.ttf / Riosevka-*.ttf sit next to
+# the patched *NerdFont-*.ttf. Only the patched ones belong in a release (shipping both
+# gives clashing font families), and only from the newest version folder.
+$verDir = Get-ChildItem -Path $iosevkaDist -Directory -Filter 'TilottamaCode*' -ErrorAction SilentlyContinue |
+    Sort-Object { [int]($_.Name -replace '\D', '0') } | Select-Object -Last 1
+$iosevkaSearch = if ($verDir) { $verDir.FullName } else { $iosevkaDist }
+$iosevkaFonts  = @(Get-ChildItem -Path $iosevkaSearch -Recurse -Filter '*NerdFont*.ttf' -ErrorAction SilentlyContinue)
+$monaspaceFonts = @(Get-ChildItem -Path $monaspaceDist -Recurse -Filter '*NerdFont*.otf' -ErrorAction SilentlyContinue)
+
+if (-not $iosevkaFonts) {
+    throw "No patched *NerdFont*.ttf found under '$iosevkaSearch'. Run IOSEVKA-Custom-NF\nerdfont.bat first (JoySevka + Riosevka)."
 }
+if (-not $monaspaceFonts) {
+    throw "No patched *NerdFont*.otf found under '$monaspaceDist'. Run MONASPACE-Custom-NF\joyspace.bat first (JoySpace)."
+}
+Write-Host "  JoySevka/Riosevka: $($iosevkaFonts.Count) ttf from $iosevkaSearch"
+Write-Host "  JoySpace         : $($monaspaceFonts.Count) otf from $monaspaceDist"
+
+$fonts = $iosevkaFonts + $monaspaceFonts
+$dupes = $fonts | Group-Object Name | Where-Object Count -gt 1
+if ($dupes) { throw "Duplicate font file name(s) across dist folders: $(($dupes.Name) -join ', ')" }
 foreach ($f in $fonts) { Copy-Item $f.FullName -Destination $stage -Force }
 Write-Host "Bundled $($fonts.Count) font file(s)" -ForegroundColor Green
 

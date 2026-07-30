@@ -62,7 +62,10 @@ directory). It performs, in order:
   italic angle, and unitsPerEm for every TTF/OTF in a folder. `python font_info.py [folder]`.
 - `Install-Font.ps1` — installs every TTF in its own folder on Windows 11 (copies to Fonts, writes
   the registry entry, broadcasts `WM_FONTCHANGE`). Must run **as Administrator**.
-- `release.ps1` — packages a release: collects built fonts from both `dist/` folders + every root
+- `release.ps1` — packages a release: collects the Nerd Font-patched fonts from both `dist/` folders
+  (`*NerdFont*.ttf` from the newest `IOSEVKA-Custom-NF/dist/TilottamaCode<N>/`, `*NerdFont*.otf` from
+  `MONASPACE-Custom-NF/dist/` — unpatched source faces are skipped, and each pipeline must have
+  produced output or the script throws) + every root
   `*LICENSE*` file + `Install-Font.ps1` into `dist/release/TilottamaCode-v<N>.zip`, then creates an
   annotated git tag `v<N>` (integer auto-increment from the latest `v*` tag, else `FONTVERNUM`).
   Packages existing output — run the build scripts first. `-Push` also pushes the tag.
