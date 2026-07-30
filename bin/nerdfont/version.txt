@@ -1,1 +1,2 @@
-https://github.com/ryanoasis/nerd-fonts/commit/b2f65760128dca0922f4ea4a4f4f1b7471f8b465
+34972ef
+Jul 23, 2026

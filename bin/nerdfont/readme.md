@@ -23,10 +23,10 @@ The added icons' authors and licenses can be found in the `src/` subdirectory.
 ## Version
 This archive is created from
 
-        commit d7c5c11e9c044630df3b7de622b1989fb826d794
-        Author: Fini Jastrow <ulf.fini.jastrow@desy.de>
-        Date:   Sat Feb 7 14:11:48 2026 +0100
+        commit 64b7726c2fc3fb9bfe74a3621d317a6d3319d908
+        Author: Fini <ulf.fini.jastrow@desy.de>
+        Date:   Wed Jul 22 22:58:28 2026 +0200
         
-            doc: Update font-patcher params
+            Merge pull request #2034 from ryanoasis/feature/center-2-cell
             
-            Signed-off-by: Fini Jastrow <ulf.fini.jastrow@desy.de>
+            Center most icons in 2 cell space
